@@ -13,13 +13,13 @@ import { createClient } from '@supabase/supabase-js';
 
 // URL del progetto Supabase
 //const SUPABASE_URL = 'https://jmeckjmuwxiqjpbualjb.supabase.co';
-//const SUPABASE_URL = 'http://127.0.0.1:54321' locale
-  const SUPABASE_URL = 'https://keila-aerobiologic-sterling.ngrok-free.dev'
+//const SUPABASE_URL = 'http://127.0.0.1:54321'
+const SUPABASE_URL = 'https://keila-aerobiologic-sterling.ngrok-free.dev'
 
 // Chiave pubblica (anon key) per l'accesso client-side
 // NOTA: Per l'applicazione web, usa la chiave anon, non la service key
 //const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImptZWNram11d3hpcWpwYnVhbGpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0ODU3OTAsImV4cCI6MjA2ODA2MTc5MH0.spScwTu10-_mmNhcUv3ez7-nHl-scbIInL7mp9FgoJ4';
-const SUPABASE_ANON_KEY = 'sb_publishable_ACJWlzQHLzjBrEguHvfOxg_3BJgxAaH' 
+const SUPABASE_ANON_KEY = 'sb_publishable_ACJWlzQHLzjBrEguHvfOxg_3BJgxAaH'
 
 // Service Role Key (solo per operazioni amministrative server-side)
 const SUPABASE_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImptZWNram11d3hpcWpwYnVhbGpiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MjQ4NTc5MCwiZXhwIjoyMDY4MDYxNzkwfQ.CwheQd0QG6qo9E9nEOD9qwf2r8YK6OPdEMUFpLOy9oI';
