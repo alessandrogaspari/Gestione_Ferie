@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Amministrativa - Gestione Ferie ATA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "@supabase/supabase-js": "https://cdn.skypack.dev/@supabase/supabase-js@2.51.0"
+        }
+    }
+    </script>
+    <style>
+
+        /* Stili aggiuntivi per la dashboard amministrativa */
+        .user-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .user-card-header {
+            background-color: #f5f5f5;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-card-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 500;
+            color: #1976d2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification-icon {
+            color: #ff9800;
+            font-size: 16px;
+            display: none;
+        }
+        
+        .user-card-body {
+            padding: 15px;
+        }
+        
+        .leave-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .leave-category {
+            flex: 1;
+            min-width: 200px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            padding: 12px;
+            border-left: 4px solid #1976d2;
+            margin-bottom: 10px;
+        }
+        
+        .leave-category.ferie { border-left-color: #4caf50; }
+        .leave-category.ferie-vecchie { border-left-color: #2196f3; }
+        .leave-category.festivita { border-left-color: #ff9800; }
+        .leave-category.motivi-familiari { border-left-color: #9c27b0; }
+        .leave-category.recuperi { border-left-color: #f44336; }
+        
+        .leave-category-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .leave-category-header i {
+            margin-right: 8px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .leave-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .leave-stat {
+            flex: 1;
+            min-width: 70px;
+            text-align: center;
+            background-color: white;
+            padding: 8px 5px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .leave-stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .leave-stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 5px;
+        }
+        
+        .leave-stat.totali .leave-stat-value { color: #1976d2; }
+        .leave-stat.utilizzate .leave-stat-value { color: #f44336; }
+        .leave-stat.residue .leave-stat-value { color: #4caf50; }
+        .leave-stat.in-attesa .leave-stat-value { color: #ff9800; }
+        
+        .leave-category.ferie .leave-stat-value { color: #4caf50; }
+        .leave-category.ferie-vecchie .leave-stat-value { color: #2196f3; }
+        .leave-category.festivita .leave-stat-value { color: #ff9800; }
+        .leave-category.motivi-familiari .leave-stat-value { color: #9c27b0; }
+        .leave-category.recuperi .leave-stat-value { color: #f44336; }
+        
+        .user-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        
+        /* Stili per la ricerca */
+        .search-container {
+            margin-bottom: 20px;
+        }
+        
+        .search-box {
+            position: relative;
+            max-width: 400px;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            z-index: 1;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 12px 40px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .leave-categories {
+                flex-direction: column;
+            }
+            
+            .leave-category {
+                min-width: auto;
+            }
+            
+            .search-box {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Template -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="school-info">
+                 <div class="school-logo">
+                     <img src="img/ipsia_logo_blue.svg" alt="Logo IPSIA">
+                 </div>
+                 <div class="school-details">
+                     <h1>I.P.S.I.A. "Ostilio Ricci" - Fermo</h1>
+                     <h2>Istituto Professionale Statale per l'Industria e l'Artigianato</h2>
+                 </div>
+             </div>
+            <div class="user-info">
+                <span id="user-name">Caricamento...</span>
+                <button class="btn btn-secondary" id="logout-btn-header" style="background-color: #f44336 !important; color: white !important; border-color: #f44336 !important;">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="dashboard-container">
+                <div class="dashboard-header">
+                    <h1>Dashboard Amministrativa</h1>
+                </div>
+            
+            <div class="dashboard-content">
+                <div id="error-message" class="error-message" style="display: none;"></div>
+                
+                <ul class="nav-tabs" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex;">
+                        <li><a href="#" class="tab-link active" data-target="users-tab">Gestione Utenti</a></li>
+                        <li><a href="dashboard.html" class="tab-link" data-target="personal-tab">Area Personale</a></li>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <li style="list-style: none;"><a href="adm_utenti.html" style="height: 38px; width: 150px; padding: 8px 15px; display: flex; align-items: center; gap: 8px; white-space: nowrap; background-color: #007bff; color: white; font-size: 14px; font-weight: 500; justify-content: center; border: none; border-radius: 4px; cursor: pointer; transition: all 0.3s ease; text-decoration: none; box-sizing: border-box;"><i class="fas fa-users"></i> Gestione Utenti</a></li>
+                        <li style="list-style: none;"><button id="esplodi-ferie-btn-nav" style="height: 38px; width: 150px; padding: 8px 15px; display: flex; align-items: center; gap: 8px; white-space: nowrap; background-color: #ffc107; color: #212529; font-size: 14px; font-weight: 500; justify-content: center; border: none; border-radius: 4px; cursor: pointer; transition: all 0.3s ease; box-sizing: border-box;"><i class="fas fa-file-excel"></i> ESPLODI FERIE</button></li>
+                        <li style="list-style: none;"><button id="riepilogo-pdf-btn" style="height: 38px; width: 150px; padding: 8px 15px; display: flex; align-items: center; gap: 8px; white-space: nowrap; background-color: #dc3545; color: white; font-size: 14px; font-weight: 500; justify-content: center; border: none; border-radius: 4px; cursor: pointer; transition: all 0.3s ease; box-sizing: border-box;"><i class="fas fa-print"></i> Riepilogo</button></li>
+                        <li style="list-style: none;"><a href="adm_festivita.html" style="height: 38px; width: 150px; padding: 8px 15px; display: flex; align-items: center; gap: 8px; white-space: nowrap; background-color: #28a745; color: white; font-size: 14px; font-weight: 500; justify-content: center; border: none; border-radius: 4px; cursor: pointer; transition: all 0.3s ease; text-decoration: none; box-sizing: border-box;"><i class="fas fa-calendar-alt"></i> FESTIVITA'</a></li>
+                    </div>
+                </ul>
+                
+                <div class="tab-content" id="users-tab" style="display: block;">
+                    <div class="search-container" style="margin-bottom: 20px;">
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <div class="filter-box" style="display: flex; align-items: center;">
+                                <input type="checkbox" id="pending-requests-filter" style="margin-right: 5px;">
+                                <label for="pending-requests-filter" style="font-size: 14px; cursor: pointer; color: #ff9800; font-weight: bold;"><i class="fas fa-bell" style="margin-right: 5px;"></i>Richieste in Attesa</label>
+                            </div>
+                            <div class="search-box" style="max-width: 400px;">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="user-search" placeholder="Cerca utente per nome..." style="width: 100%; padding: 12px 40px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="loading-indicator" style="display: none; text-align: center; padding: 20px; width: 100%;">
+                        <div style="margin-bottom: 10px; font-weight: bold; color: #1976d2;">
+                            <i class="fas fa-spinner fa-spin" style="margin-right: 10px;"></i>Caricamento dati in corso...
+                        </div>
+                        <div class="progress-bar-container" style="height: 10px; background-color: #e0e0e0; border-radius: 5px; overflow: hidden; width: 100%; max-width: 500px; margin: 0 auto;">
+                            <div id="progress-bar" style="height: 100%; width: 0%; background-color: #1976d2; transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+                    <!-- Controlli di paginazione -->
+                    <div class="pagination-container" id="pagination-container" style="display: none; margin-bottom: 20px; text-align: center;">
+                        <div class="pagination-info" style="margin-bottom: 10px; color: #666; font-size: 14px;">
+                            <span id="pagination-info-text">Visualizzazione utenti 1-10 di 0</span>
+                        </div>
+                        <div class="pagination-controls" style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+                            <button id="prev-page-btn" class="btn btn-secondary" style="padding: 8px 16px; font-size: 14px;" disabled>
+                                <i class="fas fa-chevron-left"></i> Precedenti
+                            </button>
+                            <span id="page-info" style="padding: 0 15px; font-weight: bold; color: #1976d2;">Pagina 1</span>
+                            <button id="next-page-btn" class="btn btn-secondary" style="padding: 8px 16px; font-size: 14px;" disabled>
+                                Successivi <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="users-container" id="users-container">
+                        <!-- Le card degli utenti verranno generate dinamicamente qui -->
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="personal-tab" style="display: none;">
+                    <p>Vai alla <a href="dashboard.html">dashboard personale</a> per gestire le tue richieste.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </main>
+    
+    <!-- Footer Template -->
+    <footer class="app-footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Sviluppatore Software: Alessandro Gaspari</p>
+            <div class="developer-info">
+                <p>Email: <a href="mailto:alessandro.gaspari@gmail.com">alessandro.gaspari@gmail.com</a></p>
+                <p>Telefono: <a href="tel:+393395014889">339 501 4889</a></p>
+                <p>LinkedIn: <a href="https://www.linkedin.com/in/gasparialessandro/" target="_blank">Alessandro Gaspari</a></p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Template per la card utente -->
+    <template id="user-card-template">
+        <div class="user-card">
+            <div class="user-card-header">
+                <h3 class="user-name">Nome Utente <i class="fas fa-bell notification-icon"></i></h3>
+                <div class="user-actions">
+                    <button class="btn btn-small btn-success init-user" style="display: none;">Inizializza</button>
+                    <div class="button-group" style="display: flex; gap: 5px;">
+                        <button class="btn btn-small btn-info detail-user">Dettaglio</button>
+                        <button class="btn btn-small btn-secondary manage-totals">Gestione Totali</button>
+                    </div>
+                </div>
+            </div>
+            <div class="user-card-body">
+                <div class="leave-categories">
+                    <div class="leave-category ferie">
+                        <div class="leave-category-header">
+                            <i class="fas fa-umbrella-beach" style="color: #4caf50;"></i> Ferie
+                        </div>
+                        <div class="leave-stats">
+                            <div class="leave-stat totali">
+                                <div class="leave-stat-label">Totali</div>
+                                <div class="leave-stat-value ferie-totali">0</div>
+                            </div>
+                            <div class="leave-stat utilizzate">
+                                <div class="leave-stat-label">Utilizzate</div>
+                                <div class="leave-stat-value ferie-utilizzate">0</div>
+                            </div>
+                            <div class="leave-stat residue">
+                                <div class="leave-stat-label">Residue</div>
+                                <div class="leave-stat-value ferie-residue">0</div>
+                            </div>
+                            <div class="leave-stat in-attesa">
+                                <div class="leave-stat-label">In attesa</div>
+                                <div class="leave-stat-value ferie-in-attesa">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="leave-category ferie-vecchie">
+                        <div class="leave-category-header">
+                            <i class="fas fa-history" style="color: #2196f3;"></i> Ferie Vecchie
+                        </div>
+                        <div class="leave-stats">
+                            <div class="leave-stat totali">
+                                <div class="leave-stat-label">Totali</div>
+                                <div class="leave-stat-value ferie-vecchie-totali">0</div>
+                            </div>
+                            <div class="leave-stat utilizzate">
+                                <div class="leave-stat-label">Utilizzate</div>
+                                <div class="leave-stat-value ferie-vecchie-utilizzate">0</div>
+                            </div>
+                            <div class="leave-stat residue">
+                                <div class="leave-stat-label">Residue</div>
+                                <div class="leave-stat-value ferie-vecchie-residue">0</div>
+                            </div>
+                            <div class="leave-stat in-attesa">
+                                <div class="leave-stat-label">In attesa</div>
+                                <div class="leave-stat-value ferie-vecchie-in-attesa">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="leave-category festivita">
+                        <div class="leave-category-header">
+                            <i class="fas fa-gift" style="color: #ff9800;"></i> Festività Soppresse
+                        </div>
+                        <div class="leave-stats">
+                            <div class="leave-stat totali">
+                                <div class="leave-stat-label">Totali</div>
+                                <div class="leave-stat-value festivita-totali">0</div>
+                            </div>
+                            <div class="leave-stat utilizzate">
+                                <div class="leave-stat-label">Utilizzate</div>
+                                <div class="leave-stat-value festivita-utilizzate">0</div>
+                            </div>
+                            <div class="leave-stat residue">
+                                <div class="leave-stat-label">Residue</div>
+                                <div class="leave-stat-value festivita-residue">0</div>
+                            </div>
+                            <div class="leave-stat in-attesa">
+                                <div class="leave-stat-label">In attesa</div>
+                                <div class="leave-stat-value festivita-in-attesa">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="leave-category motivi-familiari">
+                        <div class="leave-category-header">
+                            <i class="fas fa-users" style="color: #9c27b0;"></i> Motivi Familiari
+                        </div>
+                        <div class="leave-stats">
+                            <div class="leave-stat totali">
+                                <div class="leave-stat-label">Totali</div>
+                                <div class="leave-stat-value motivi-familiari-totali">0</div>
+                            </div>
+                            <div class="leave-stat utilizzate">
+                                <div class="leave-stat-label">Utilizzate</div>
+                                <div class="leave-stat-value motivi-familiari-utilizzati">0</div>
+                            </div>
+                            <div class="leave-stat residue">
+                                <div class="leave-stat-label">Residue</div>
+                                <div class="leave-stat-value motivi-familiari-residui">0</div>
+                            </div>
+                            <div class="leave-stat in-attesa">
+                                <div class="leave-stat-label">In attesa</div>
+                                <div class="leave-stat-value motivi-familiari-in-attesa">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="leave-category recuperi">
+                        <div class="leave-category-header">
+                            <i class="fas fa-clock" style="color: #f44336;"></i> Recuperi
+                        </div>
+                        <div class="leave-stats">
+                            <div class="leave-stat totali">
+                                <div class="leave-stat-label">Totali</div>
+                                <div class="leave-stat-value recuperi-totali">0</div>
+                            </div>
+                            <div class="leave-stat utilizzate">
+                                <div class="leave-stat-label">Utilizzate</div>
+                                <div class="leave-stat-value recuperi-utilizzati">0</div>
+                            </div>
+                            <div class="leave-stat residue">
+                                <div class="leave-stat-label">Residue</div>
+                                <div class="leave-stat-value recuperi-residui">0</div>
+                            </div>
+                            <div class="leave-stat in-attesa">
+                                <div class="leave-stat-label">In attesa</div>
+                                <div class="leave-stat-value recuperi-in-attesa">0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </template>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script type="module" src="js/user-utils.js"></script>
+    <script type="module" src="js/api.js"></script>
+    <script type="module" src="js/adm_dashboard.js"></script>
+    <script type="module" src="js/adm_esplodi_ferie.js"></script>
+    <script>
+        // Funzione globale per generare Excel delle ferie esplose
+        function generateExcelEsplodiFerie(datiProcessati) {
+            // Crea un nuovo workbook
+            const workbook = XLSX.utils.book_new();
+            
+            // Prepara i dati per il foglio Excel
+            const worksheetData = [];
+            
+            // Intestazione
+            worksheetData.push([
+                'Username', 'Nome', 'Cognome', 'Tipo', 'Data Inizio', 'Data Fine', 'Giorni', 'Stato', 'Data Richiesta'
+            ]);
+            
+            // Aggiungi i dati
+            datiProcessati.forEach(richiesta => {
+                worksheetData.push([
+                    richiesta.username,
+                    richiesta.nome,
+                    richiesta.cognome,
+                    richiesta.tipo,
+                    richiesta.dataInizio,
+                    richiesta.dataFine,
+                    richiesta.giorni,
+                    richiesta.stato,
+                    richiesta.dataRichiesta
+                ]);
+            });
+            
+            // Crea il foglio di lavoro
+            const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+            
+            // Aggiungi il foglio al workbook
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Ferie Esplose');
+            
+            // Genera il file Excel come blob
+            const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+            const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            
+            return blob;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Totali - Gestione Ferie</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .totals-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            border-color: #1976d2;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+        }
+
+        .btn-save {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-save:hover {
+            background-color: #43a047;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <div class="user-info">
+                <span>Gestione totali per: </span>
+                <span id="user-name"></span>
+            </div>
+            <button class="btn btn-secondary" onclick="localStorage.removeItem('selectedUserData'); window.location.href='adm_dashboard.html'">Torna alla Dashboard</button>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Gestione Totali Ferie</h2>
+            </div>
+            <div class="card-body">
+                <form id="totals-form">
+                    <div class="form-group">
+                        <label for="ferieTotali">Ferie Totali</label>
+                        <input type="number" id="ferieTotali" name="ferieTotali" min="0" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ferieVecchieTotali">Ferie Vecchie Totali</label>
+                        <input type="number" id="ferieVecchieTotali" name="ferieVecchieTotali" min="0" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="festivitaTotali">Festività Totali</label>
+                        <input type="number" id="festivitaTotali" name="festivitaTotali" min="0" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="motiviFamiliariTotali">Motivi Familiari Totali</label>
+                        <input type="number" id="motiviFamiliariTotali" name="motiviFamiliariTotali" min="0" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recuperiTotali">Recuperi Totali</label>
+                        <input type="number" id="recuperiTotali" name="recuperiTotali" min="0" step="1" required>
+                    </div>
+                    <button type="submit" class="btn-save">Salva Modifiche</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/user-utils.js"></script>
+    <script src="js/adm_totali.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+.calendar-request-approvata, .calendar-request-in-attesa, .calendar-request-rifiutata, .calendar-request-sconosciuto {
+    width: 16px;
+    height: 12px;
+    display: inline-block;
+    border-radius: 2px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.calendar-request-approvata {
+    background-color: #4caf50;
+}
+
+.calendar-request-in-attesa {
+    background-color: #ff9800;
+}
+
+.calendar-request-rifiutata {
+    background-color: #f44336;
+}
+
+.calendar-request-sconosciuto {
+    background-color: #9e9e9e;
+}

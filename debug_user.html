@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Utente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .debug-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+        .debug-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #007bff;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        .success {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        pre {
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <h1>Debug Informazioni Utente</h1>
+        
+        <div id="auth-status" class="debug-info"></div>
+        <div id="user-data" class="debug-info"></div>
+        <div id="role-check" class="debug-info"></div>
+        
+        <button onclick="checkUserData()">Aggiorna Dati</button>
+        <button onclick="clearSession()">Pulisci Sessione</button>
+        <button onclick="goToLogin()">Vai al Login</button>
+    </div>
+
+    <script>
+        function checkUserData() {
+            // Verifica autenticazione
+            const authStatus = document.getElementById('auth-status');
+            const userData = document.getElementById('user-data');
+            const roleCheck = document.getElementById('role-check');
+            
+            // Controlla se l'utente è autenticato
+            const user = sessionStorage.getItem('user');
+            
+            if (user) {
+                authStatus.className = 'debug-info success';
+                authStatus.innerHTML = '<strong>Stato Autenticazione:</strong> ✅ Autenticato';
+                
+                try {
+                    const parsedUser = JSON.parse(user);
+                    userData.className = 'debug-info';
+                    userData.innerHTML = `
+                        <strong>Dati Utente:</strong><br>
+                        <pre>${JSON.stringify(parsedUser, null, 2)}</pre>
+                    `;
+                    
+                    // Verifica ruolo
+                    const adminRoles = ['SUPERUSER', 'DS', 'DSGA', 'admin'];
+                    const isAdmin = adminRoles.includes(parsedUser.ruolo);
+                    
+                    roleCheck.className = isAdmin ? 'debug-info success' : 'debug-info error';
+                    roleCheck.innerHTML = `
+                        <strong>Controllo Ruolo:</strong><br>
+                        Ruolo corrente: <strong>${parsedUser.ruolo}</strong><br>
+                        Ruoli amministrativi: ${adminRoles.join(', ')}<br>
+                        È amministratore: ${isAdmin ? '✅ SÌ' : '❌ NO'}<br>
+                        Può accedere alla dashboard admin: ${isAdmin ? '✅ SÌ' : '❌ NO'}
+                    `;
+                    
+                } catch (error) {
+                    userData.className = 'debug-info error';
+                    userData.innerHTML = `<strong>Errore parsing dati utente:</strong> ${error.message}`;
+                }
+                
+            } else {
+                authStatus.className = 'debug-info error';
+                authStatus.innerHTML = '<strong>Stato Autenticazione:</strong> ❌ Non autenticato';
+                
+                userData.className = 'debug-info';
+                userData.innerHTML = '<strong>Dati Utente:</strong> Nessun dato trovato in sessionStorage';
+                
+                roleCheck.className = 'debug-info error';
+                roleCheck.innerHTML = '<strong>Controllo Ruolo:</strong> Impossibile verificare - utente non autenticato';
+            }
+        }
+        
+        function clearSession() {
+            sessionStorage.removeItem('user');
+            alert('Sessione pulita!');
+            checkUserData();
+        }
+        
+        function goToLogin() {
+            window.location.href = 'index.html';
+        }
+        
+        // Carica i dati all'avvio
+        checkUserData();
+    </script>
+</body>
+</html>

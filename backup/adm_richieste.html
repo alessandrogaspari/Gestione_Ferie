@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dettaglio Richieste - Gestione Ferie</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .request-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-approve {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-reject {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-delete {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-approve:hover {
+            background-color: #43a047;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .btn-reject:hover {
+            background-color: #d32f2f;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .btn-delete:hover {
+            background-color: #1565c0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        #requests-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <div class="user-info">
+                <span>Dettaglio richieste di: </span>
+                <span id="user-name"></span>
+            </div>
+            <button class="btn btn-secondary" onclick="localStorage.removeItem('selectedUserData'); window.location.href='adm_dashboard.html'">Torna alla Dashboard</button>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Le mie richieste</h2>
+            </div>
+            <div class="card-body">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Data Inizio</th>
+                                <th>Data Fine</th>
+                                <th>Giorni</th>
+                                <th>Stato</th>
+                                <th>Azioni</th>
+                            </tr>
+                        </thead>
+                        <tbody id="requests-table-body">
+                            <!-- Le richieste verranno caricate dinamicamente qui -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Template per la riga della tabella -->
+        <template id="request-row-template">
+            <tr>
+                <td class="request-type"></td>
+                <td class="date-from"></td>
+                <td class="date-to"></td>
+                <td class="days-count"></td>
+                <td class="request-status"></td>
+                <td>
+                    <div class="request-actions">
+                        <button class="btn-approve">APPROVATO</button>
+                        <button class="btn-reject">RIFIUTATO</button>
+                        <button class="btn-delete">ELIMINA</button>
+                    </div>
+                </td>
+            </tr>
+        </template>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/user-utils.js"></script>
+    <script src="js/adm_richieste.js"></script>
+</body>
+</html>

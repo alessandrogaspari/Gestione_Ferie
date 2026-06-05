@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Festività - Amministrazione</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "@supabase/supabase-js": "https://cdn.skypack.dev/@supabase/supabase-js@2.51.0"
+        }
+    }
+    </script>
+    <style>
+        .festivita-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .festivita-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .festivita-table th,
+        .festivita-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .festivita-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+            position: sticky;
+            top: 0;
+        }
+        
+        .festivita-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .festivita-fissa {
+            background-color: #e8f5e8;
+        }
+        
+        .festivita-mobile {
+            background-color: #e8f0ff;
+        }
+        
+        .sospensione-didattica {
+            background-color: #fff3cd;
+        }
+        
+        .sospensione-didattica.editable {
+            background-color: #ffeaa7;
+        }
+        
+        .tipo-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .tipo-fissa {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .tipo-mobile {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        
+        .tipo-sospensione {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: flex-end;
+        }
+        
+        .btn-action {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-insert {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .btn-insert:hover {
+            background-color: #218838;
+        }
+        
+        .btn-modify {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-modify:hover {
+            background-color: #e0a800;
+        }
+        
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            color: #333;
+        }
+        
+        .close {
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .close:hover {
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        
+        .btn-modal {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .btn-save {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .btn-cancel {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .selected-row {
+            background-color: #007bff !important;
+            color: white;
+        }
+        
+        .back-button {
+            margin-bottom: 20px;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .page-title {
+            color: #333;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Template -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="school-info">
+                 <div class="school-logo">
+                     <img src="img/ipsia_logo_blue.svg" alt="Logo IPSIA">
+                 </div>
+                 <div class="school-details">
+                     <h1>I.P.S.I.A. "Ostilio Ricci" - Fermo</h1>
+                     <h2>Istituto Professionale Statale per l'Industria e l'Artigianato</h2>
+                 </div>
+             </div>
+            <div class="user-info">
+                <span id="user-name">Caricamento...</span>
+                <button class="btn btn-secondary" onclick="UserUtils.logout()" style="background-color: #f44336 !important; color: white !important; border-color: #f44336 !important;">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+        <div class="festivita-container">
+            <div class="page-header">
+                <h1 class="page-title">Gestione Festività e Sospensioni Didattiche</h1>
+                <a href="adm_dashboard.html" class="btn btn-secondary back-button">
+                    <i class="fas fa-arrow-left"></i> Torna alla Dashboard
+                </a>
+            </div>
+            
+            <div id="error-message" class="error-message" style="display: none;"></div>
+            <div id="success-message" class="success-message" style="display: none;"></div>
+            
+            <div class="action-buttons">
+                <button class="btn-action btn-insert" id="btn-insert">
+                    <i class="fas fa-plus"></i> Inserisci Sospensione
+                </button>
+                <button class="btn-action" id="btn-genera-festivita" style="background-color: #17a2b8; color: white;">
+                    <i class="fas fa-calendar-plus"></i> Genera Festività Anno Scolastico
+                </button>
+                <button class="btn-action btn-modify" id="btn-modify" disabled>
+                    <i class="fas fa-edit"></i> Modifica
+                </button>
+                <button class="btn-action btn-delete" id="btn-delete" disabled>
+                    <i class="fas fa-trash"></i> Elimina
+                </button>
+            </div>
+            
+            <table class="festivita-table" id="festivita-table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Descrizione</th>
+                        <th>Tipo</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody id="festivita-tbody">
+                    <!-- Le festività verranno caricate dinamicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Modal per inserimento/modifica sospensioni -->
+    <!-- Modal per inserimento/modifica sospensioni -->
+    <div id="sospensione-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Inserisci Sospensione Didattica</h3>
+                <span class="close" id="modal-close">&times;</span>
+            </div>
+            <form id="sospensione-form">
+                <div class="form-group">
+                    <label for="data-sospensione">Data:</label>
+                    <input type="date" id="data-sospensione" name="data" required>
+                </div>
+                <div class="form-group">
+                    <label for="descrizione-sospensione">Descrizione:</label>
+                    <input type="text" id="descrizione-sospensione" name="descrizione" placeholder="Es: Ponte, Sospensione attività didattiche" required>
+                </div>
+                <div class="form-group">
+                    <label for="tipo-sospensione">Tipo:</label>
+                    <select id="tipo-sospensione" name="tipo" required>
+                        <option value="sospensione">Sospensione</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-modal btn-cancel" id="btn-cancel-modal">Annulla</button>
+                    <button type="submit" class="btn-modal btn-save">Salva</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    </main>
+
+    <!-- Footer Template -->
+    <footer class="app-footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Sviluppatore Software: Alessandro Gaspari</p>
+            <div class="developer-info">
+                <p>Email: <a href="mailto:alessandro.gaspari@gmail.com">alessandro.gaspari@gmail.com</a></p>
+                <p>Telefono: <a href="tel:+393395014889">339 501 4889</a></p>
+                <p>LinkedIn: <a href="https://www.linkedin.com/in/gasparialessandro/" target="_blank">Alessandro Gaspari</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="js/user-utils.js"></script>
+    <script type="module" src="js/holidays.js"></script>
+    <script type="module" src="js/api.js"></script>
+    <script type="module" src="js/adm_festivita.js"></script>
+</body>
+</html>

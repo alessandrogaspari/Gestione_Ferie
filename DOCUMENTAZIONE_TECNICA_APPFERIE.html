@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentazione Tecnica - WebApp AppFerie</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        h4 {
+            color: #34495e;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 30px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        code {
+            background-color: #f1f2f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e74c3c;
+        }
+        pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+        pre code {
+            background: none;
+            color: #ecf0f1;
+            padding: 0;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            padding: 15px;
+            border-left: 4px solid #28a745;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .warning {
+            background-color: #f8d7da;
+            padding: 15px;
+            border-left: 4px solid #dc3545;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+        hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            margin: 40px 0;
+        }
+        .toc {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            border: 1px solid #dee2e6;
+        }
+        .toc h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .toc ul {
+            margin-bottom: 0;
+        }
+        .toc a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="emoji">📱</span>Documentazione Tecnica - WebApp AppFerie</h1>
+        <h2>Soluzione Localhost + Ngrok</h2>
+        
+        <div class="toc">
+            <h3>Indice</h3>
+            <ul>
+                <li><a href="#architettura">🏗️ Architettura della WebApp</a></li>
+                <li><a href="#ngrok">🌐 Soluzione Ngrok</a></li>
+                <li><a href="#github">📱 Automazione GitHub</a></li>
+                <li><a href="#configurazione">⚙️ Configurazione Postazione Locale</a></li>
+                <li><a href="#flusso">🔄 Flusso Operativo</a></li>
+                <li><a href="#vantaggi">📊 Vantaggi della Soluzione</a></li>
+                <li><a href="#manutenzione">🛠️ Manutenzione</a></li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <h2 id="architettura"><span class="emoji">🏗️</span><strong>ARCHITETTURA DELLA WEBAPP</strong></h2>
+
+        <h3><strong>Database</strong></h3>
+        <ul>
+            <li><strong>Tecnologia</strong>: Supabase (PostgreSQL cloud-based)</li>
+            <li><strong>Caratteristiche</strong>: Database relazionale con autenticazione integrata e API REST automatiche</li>
+            <li><strong>Vantaggi</strong>: Scalabilità, sicurezza RLS (Row Level Security), backup automatici</li>
+        </ul>
+
+        <h3><strong>Backend</strong></h3>
+        <ul>
+            <li><strong>Linguaggio</strong>: JavaScript (Node.js)</li>
+            <li><strong>Server</strong>: HTTP nativo Node.js</li>
+            <li><strong>Funzionalità</strong>:
+                <ul>
+                    <li>Gestione CORS</li>
+                    <li>Servizio file statici</li>
+                    <li>Proxy per richieste API</li>
+                    <li>Header personalizzati per ngrok</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3><strong>Frontend</strong></h3>
+        <ul>
+            <li><strong>Linguaggio</strong>: HTML5 + CSS3 + JavaScript vanilla</li>
+            <li><strong>Librerie</strong>: Supabase Client SDK</li>
+            <li><strong>Caratteristiche</strong>: SPA (Single Page Application) responsive</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="ngrok"><span class="emoji">🌐</span><strong>SOLUZIONE NGROK</strong></h2>
+
+        <h3><strong>Problema Risolto</strong></h3>
+        <ul>
+            <li><strong>Limite</strong>: Ngrok cambia URL ad ogni riavvio</li>
+            <li><strong>Soluzione</strong>: Automazione con GitHub Pages come punto di accesso fisso</li>
+        </ul>
+
+        <h3><strong>Configurazione Ngrok</strong></h3>
+
+        <h4><strong>1. Installazione</strong></h4>
+        <pre><code># Download da https://ngrok.com/download
+# Estrazione in C:\ngrok</code></pre>
+
+        <h4><strong>2. Registrazione Token</strong></h4>
+        <pre><code>ngrok config add-authtoken IL_TUO_TOKEN_NGROK</code></pre>
+
+        <h4><strong>3. Avvio Tunnel</strong></h4>
+        <pre><code>ngrok http 3000</code></pre>
+
+        <h4><strong>4. Configurazione Avanzata</strong></h4>
+        <ul>
+            <li><strong>File</strong>: <code>ngrok.yml</code></li>
+            <li><strong>Posizione</strong>: <code>%USERPROFILE%\.ngrok2\ngrok.yml</code></li>
+            <li><strong>Contenuto</strong>:</li>
+        </ul>
+        <pre><code>version: "2"
+authtoken: IL_TUO_TOKEN
+tunnels:
+  appferie:
+    proto: http
+    addr: 3000
+    bind_tls: true</code></pre>
+
+        <hr>
+
+        <h2 id="github"><span class="emoji">📱</span><strong>AUTOMAZIONE GITHUB</strong></h2>
+
+        <h3><strong>Creazione Repository</strong></h3>
+
+        <h4><strong>1. Nuovo Repository</strong></h4>
+        <ul>
+            <li>Nome: <code>appferie-link</code></li>
+            <li>Visibilità: Public</li>
+            <li>Abilita GitHub Pages</li>
+        </ul>
+
+        <h4><strong>2. Configurazione Pages</strong></h4>
+        <ul>
+            <li>Settings → Pages</li>
+            <li>Source: Deploy from branch</li>
+            <li>Branch: main</li>
+            <li>Folder: / (root)</li>
+        </ul>
+
+        <h3><strong>API GitHub - Configurazione</strong></h3>
+
+        <h4><strong>1. Personal Access Token</strong></h4>
+        <ul>
+            <li>Settings → Developer settings → Personal access tokens</li>
+            <li>Scopes necessari:
+                <ul>
+                    <li><code>repo</code> (accesso completo ai repository)</li>
+                    <li><code>workflow</code> (se si usano GitHub Actions)</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h4><strong>2. Configurazione nel Codice</strong></h4>
+        <pre><code>const config = {
+  github: {
+    token: 'ghp_XXXXXXXXXXXXXXXXXX',
+    owner: 'TUO_USERNAME',
+    repo: 'appferie-link',
+    branch: 'main'
+  }
+};</code></pre>
+
+        <h3><strong>Procedura Automazione</strong></h3>
+
+        <h4><strong>1. Script di Monitoraggio</strong></h4>
+        <ul>
+            <li><strong>File</strong>: <code>ngrok-automation.js</code></li>
+            <li><strong>Funzione</strong>: Monitora cambio URL ngrok</li>
+            <li><strong>Frequenza</strong>: Ogni 30 secondi</li>
+        </ul>
+
+        <h4><strong>2. Aggiornamento Automatico</strong></h4>
+        <pre><code>// Recupero URL ngrok corrente
+const ngrokUrl = await getNgrokUrl();
+
+// Aggiornamento file index.html su GitHub
+const content = `
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;AppFerie - Accesso&lt;/title&gt;
+    &lt;meta http-equiv="refresh" content="0;url=${ngrokUrl}"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;p&gt;Reindirizzamento a AppFerie...&lt;/p&gt;
+    &lt;a href="${ngrokUrl}"&gt;Clicca qui se non vieni reindirizzato&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+`;
+
+// Push su GitHub via API
+await updateGitHubFile(content);</code></pre>
+
+        <hr>
+
+        <h2 id="configurazione"><span class="emoji">⚙️</span><strong>CONFIGURAZIONE POSTAZIONE LOCALE</strong></h2>
+
+        <h3><strong>1. Prerequisiti</strong></h3>
+        <ul>
+            <li>Node.js v16+</li>
+            <li>Account Ngrok (con token)</li>
+            <li>Account GitHub (con PAT)</li>
+            <li>Account Supabase</li>
+        </ul>
+
+        <h3><strong>2. Setup Progetto</strong></h3>
+        <pre><code># Clonazione progetto
+git clone https://github.com/USERNAME/AppFerie.git
+cd AppFerie
+
+# Installazione dipendenze
+npm install
+
+# Configurazione ngrok
+ngrok config add-authtoken IL_TUO_TOKEN</code></pre>
+
+        <h3><strong>3. Configurazione Variabili</strong></h3>
+        <ul>
+            <li><strong>File</strong>: <code>ngrok-automation.js</code></li>
+            <li><strong>Variabili da configurare</strong>:
+                <ul>
+                    <li>Token GitHub</li>
+                    <li>Credenziali email</li>
+                    <li>URL Supabase</li>
+                    <li>Chiavi API Supabase</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3><strong>4. Avvio Automazione</strong></h3>
+        <pre><code># Avvio manuale
+node server.js
+node ngrok-automation.js
+
+# Avvio automatico (Windows)
+schtasks /create /tn "AppFerie_Startup" /tr "C:\path\to\start-automation.bat" /sc onstart</code></pre>
+
+        <hr>
+
+        <h2 id="flusso"><span class="emoji">🔄</span><strong>FLUSSO OPERATIVO</strong></h2>
+
+        <h3><strong>1. Avvio Sistema</strong></h3>
+        <ol>
+            <li>Server Node.js si avvia sulla porta 3000</li>
+            <li>Ngrok crea tunnel HTTPS pubblico</li>
+            <li>Script automazione monitora URL ngrok</li>
+        </ol>
+
+        <h3><strong>2. Gestione Cambi URL</strong></h3>
+        <ol>
+            <li>Rilevamento nuovo URL ngrok</li>
+            <li>Aggiornamento automatico GitHub Pages</li>
+            <li>Notifica email agli amministratori</li>
+            <li>Log delle operazioni</li>
+        </ol>
+
+        <h3><strong>3. Accesso Utenti</strong></h3>
+        <ol>
+            <li>Utenti accedono a: <code>https://username.github.io/appferie-link</code></li>
+            <li>Redirect automatico all'URL ngrok corrente</li>
+            <li>Accesso alla webapp AppFerie</li>
+        </ol>
+
+        <hr>
+
+        <h2 id="vantaggi"><span class="emoji">📊</span><strong>VANTAGGI DELLA SOLUZIONE</strong></h2>
+
+        <div class="success">
+            <h3><strong>✅ Benefici</strong></h3>
+            <ul>
+                <li><strong>URL Fisso</strong>: GitHub Pages fornisce endpoint stabile</li>
+                <li><strong>Automazione Completa</strong>: Zero intervento manuale</li>
+                <li><strong>Monitoraggio</strong>: Log e notifiche email</li>
+                <li><strong>Scalabilità</strong>: Supporta multiple istanze</li>
+                <li><strong>Costo Zero</strong>: Servizi gratuiti (GitHub, Ngrok free tier)</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <h3><strong>⚠️ Limitazioni</strong></h3>
+            <ul>
+                <li><strong>Dipendenza Internet</strong>: Richiede connessione stabile</li>
+                <li><strong>Ngrok Free</strong>: Limite di 1 tunnel simultaneo</li>
+                <li><strong>Latenza</strong>: Doppio hop (GitHub → Ngrok → Localhost)</li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <h2 id="manutenzione"><span class="emoji">🛠️</span><strong>MANUTENZIONE</strong></h2>
+
+        <h3><strong>Monitoraggio Quotidiano</strong></h3>
+        <ul>
+            <li>Verifica log automazione</li>
+            <li>Controllo email notifiche</li>
+            <li>Test accesso webapp</li>
+        </ul>
+
+        <h3><strong>Backup Settimanale</strong></h3>
+        <ul>
+            <li>Export database Supabase</li>
+            <li>Backup configurazioni</li>
+            <li>Verifica repository GitHub</li>
+        </ul>
+
+        <h3><strong>Aggiornamenti</strong></h3>
+        <ul>
+            <li>Rinnovo token Ngrok (se necessario)</li>
+            <li>Aggiornamento dipendenze Node.js</li>
+            <li>Monitoraggio limiti API GitHub</li>
+        </ul>
+
+        <hr>
+
+        <div class="highlight">
+            <p><strong>📝 Nota:</strong> Questa documentazione è stata generata automaticamente per il progetto AppFerie. Per ulteriori informazioni o supporto, consultare i file di configurazione nel repository del progetto.</p>
+        </div>
+
+        <p style="text-align: center; margin-top: 40px; color: #7f8c8d; font-style: italic;">
+            Documentazione creata il: <script>document.write(new Date().toLocaleDateString('it-IT'));</script>
+        </p>
+    </div>
+</body>
+</html>

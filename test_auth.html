@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Autenticazione</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 800px;
+        }
+        .test-result {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #007bff;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        .success {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        .warning {
+            border-left-color: #ffc107;
+            background: #fff3cd;
+        }
+        pre {
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Test Autenticazione e Ruoli</h1>
+        
+        <div id="session-test" class="test-result"></div>
+        <div id="role-test" class="test-result"></div>
+        <div id="access-test" class="test-result"></div>
+        
+        <button onclick="runTests()">Esegui Test</button>
+        <button onclick="simulateLogin()">Simula Login Admin</button>
+        <button onclick="clearSession()">Pulisci Sessione</button>
+        <button onclick="goToAdminDashboard()">Vai alla Dashboard Admin</button>
+        <button onclick="goToLogin()">Vai al Login</button>
+    </div>
+
+    <script>
+        function runTests() {
+            testSessionStorage();
+            testRoleAccess();
+            testAdminAccess();
+        }
+        
+        function testSessionStorage() {
+            const sessionTest = document.getElementById('session-test');
+            const user = sessionStorage.getItem('user');
+            
+            if (user) {
+                try {
+                    const parsedUser = JSON.parse(user);
+                    sessionTest.className = 'test-result success';
+                    sessionTest.innerHTML = `
+                        <strong>✅ SessionStorage Test - SUCCESSO</strong><br>
+                        Utente trovato in sessionStorage:<br>
+                        <pre>${JSON.stringify(parsedUser, null, 2)}</pre>
+                    `;
+                } catch (error) {
+                    sessionTest.className = 'test-result error';
+                    sessionTest.innerHTML = `
+                        <strong>❌ SessionStorage Test - ERRORE</strong><br>
+                        Errore nel parsing dei dati utente: ${error.message}<br>
+                        Dati grezzi: ${user}
+                    `;
+                }
+            } else {
+                sessionTest.className = 'test-result warning';
+                sessionTest.innerHTML = `
+                    <strong>⚠️ SessionStorage Test - VUOTO</strong><br>
+                    Nessun utente trovato in sessionStorage.<br>
+                    L'utente deve effettuare il login.
+                `;
+            }
+        }
+        
+        function testRoleAccess() {
+            const roleTest = document.getElementById('role-test');
+            const user = sessionStorage.getItem('user');
+            
+            if (user) {
+                try {
+                    const parsedUser = JSON.parse(user);
+                    const adminRoles = ['SUPERUSER', 'DS', 'DSGA', 'admin'];
+                    const isAdmin = adminRoles.includes(parsedUser.ruolo);
+                    
+                    roleTest.className = isAdmin ? 'test-result success' : 'test-result error';
+                    roleTest.innerHTML = `
+                        <strong>${isAdmin ? '✅' : '❌'} Test Ruolo - ${isAdmin ? 'ACCESSO CONSENTITO' : 'ACCESSO NEGATO'}</strong><br>
+                        Ruolo corrente: <strong>${parsedUser.ruolo}</strong><br>
+                        Ruoli amministrativi validi: ${adminRoles.join(', ')}<br>
+                        È amministratore: ${isAdmin ? 'SÌ' : 'NO'}<br>
+                        Può accedere alle pagine adm_: ${isAdmin ? 'SÌ' : 'NO'}
+                    `;
+                } catch (error) {
+                    roleTest.className = 'test-result error';
+                    roleTest.innerHTML = `
+                        <strong>❌ Test Ruolo - ERRORE</strong><br>
+                        Impossibile verificare il ruolo: ${error.message}
+                    `;
+                }
+            } else {
+                roleTest.className = 'test-result warning';
+                roleTest.innerHTML = `
+                    <strong>⚠️ Test Ruolo - NON APPLICABILE</strong><br>
+                    Impossibile verificare il ruolo: utente non autenticato.
+                `;
+            }
+        }
+        
+        function testAdminAccess() {
+            const accessTest = document.getElementById('access-test');
+            const user = sessionStorage.getItem('user');
+            
+            if (user) {
+                try {
+                    const parsedUser = JSON.parse(user);
+                    const adminRoles = ['SUPERUSER', 'DS', 'DSGA', 'admin'];
+                    const hasAccess = adminRoles.includes(parsedUser.ruolo);
+                    
+                    accessTest.className = hasAccess ? 'test-result success' : 'test-result error';
+                    accessTest.innerHTML = `
+                        <strong>${hasAccess ? '✅' : '❌'} Test Accesso Dashboard Admin</strong><br>
+                        Controllo accesso: ${hasAccess ? 'CONSENTITO' : 'BLOCCATO'}<br>
+                        Reindirizzamento: ${hasAccess ? 'adm_dashboard.html' : 'index.html'}<br>
+                        Motivo: ${hasAccess ? 'Ruolo amministrativo valido' : 'Ruolo non amministrativo'}
+                    `;
+                } catch (error) {
+                    accessTest.className = 'test-result error';
+                    accessTest.innerHTML = `
+                        <strong>❌ Test Accesso - ERRORE</strong><br>
+                        Errore nella verifica: ${error.message}
+                    `;
+                }
+            } else {
+                accessTest.className = 'test-result error';
+                accessTest.innerHTML = `
+                    <strong>❌ Test Accesso - BLOCCATO</strong><br>
+                    Accesso negato: utente non autenticato<br>
+                    Reindirizzamento: index.html
+                `;
+            }
+        }
+        
+        function simulateLogin() {
+            const testUser = {
+                username: 'test_admin',
+                nome: 'Test Admin',
+                ruolo: 'SUPERUSER'
+            };
+            
+            sessionStorage.setItem('user', JSON.stringify(testUser));
+            alert('Login simulato con ruolo SUPERUSER!');
+            runTests();
+        }
+        
+        function clearSession() {
+            sessionStorage.removeItem('user');
+            alert('Sessione pulita!');
+            runTests();
+        }
+        
+        function goToAdminDashboard() {
+            window.location.href = 'adm_dashboard.html';
+        }
+        
+        function goToLogin() {
+            window.location.href = 'index.html';
+        }
+        
+        // Esegui test automaticamente al caricamento
+        runTests();
+    </script>
+</body>
+</html>

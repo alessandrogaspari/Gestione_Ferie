@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Totali - Gestione Ferie</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "@supabase/supabase-js": "https://cdn.skypack.dev/@supabase/supabase-js@2.51.0"
+        }
+    }
+    </script>
+    
+</head>
+<body>
+    <!-- Header Template -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="school-info">
+                 <div class="school-logo">
+                     <img src="img/ipsia_logo_blue.svg" alt="Logo IPSIA">
+                 </div>
+                 <div class="school-details">
+                     <h1>I.P.S.I.A. "Ostilio Ricci" - Fermo</h1>
+                     <h2>Istituto Professionale Statale per l'Industria e l'Artigianato</h2>
+                 </div>
+             </div>
+            <div class="user-info">
+                <span id="user-name">Caricamento...</span>
+                <button class="btn btn-secondary" onclick="UserUtils.logout()" style="background-color: #f44336 !important; color: white !important; border-color: #f44336 !important;">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+    <div class="container">
+        <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 style="margin: 0;">Dettaglio richieste di: <span id="selected-user-name"></span></h2>
+            <a href="adm_dashboard.html" class="btn btn-secondary" style="margin-left: 20px;">Torna alla Dashboard</a>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Gestione Totali Ferie</h2>
+            </div>
+            <div class="card-body">
+                <form id="totals-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="form-group">
+                        <label for="ferieTotali"><i class="fas fa-umbrella-beach" style="color: #4caf50; margin-right: 8px;"></i>Ferie Totali</label>
+                        <input type="number" id="ferieTotali" name="ferieTotali" min="0" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ferieVecchieTotali"><i class="fas fa-history" style="color: #2196f3; margin-right: 8px;"></i>Ferie Vecchie Totali</label>
+                        <input type="number" id="ferieVecchieTotali" name="ferieVecchieTotali" min="0" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="festivitaTotali"><i class="fas fa-gift" style="color: #ff9800; margin-right: 8px;"></i>Festività Totali</label>
+                        <input type="number" id="festivitaTotali" name="festivitaTotali" min="0" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="motiviFamiliariTotali"><i class="fas fa-users" style="color: #9c27b0; margin-right: 8px;"></i>Motivi Familiari Totali</label>
+                        <input type="number" id="motiviFamiliariTotali" name="motiviFamiliariTotali" min="0" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recuperiTotali"><i class="fas fa-clock" style="color: #f44336; margin-right: 8px;"></i>Recuperi Totali</label>
+                        <input type="number" id="recuperiTotali" name="recuperiTotali" min="0" step="1" required>
+                    </div>
+                    <button type="submit" class="btn-save" style="grid-column: 1 / -1; background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Salva Modifiche</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </main>
+
+    <!-- Footer Template -->
+    <footer class="app-footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Sviluppatore Software: Alessandro Gaspari</p>
+            <div class="developer-info">
+                <p>Email: <a href="mailto:alessandro.gaspari@gmail.com">alessandro.gaspari@gmail.com</a></p>
+                <p>Telefono: <a href="tel:+393395014889">339 501 4889</a></p>
+                <p>LinkedIn: <a href="https://www.linkedin.com/in/gasparialessandro/" target="_blank">Alessandro Gaspari</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="js/api.js"></script>
+    <script type="module" src="js/user-utils.js"></script>
+    <script type="module" src="js/adm_totali.js"></script>
+</body>
+</html>

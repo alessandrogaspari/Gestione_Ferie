@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Gestione Ferie ATA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/calendar.css">
+    <style>
+        /* Stili per le categorie di ferie */
+        .leave-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .leave-category {
+            flex: 1;
+            min-width: 200px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            padding: 12px;
+            border-left: 4px solid #1976d2;
+        }
+        
+        .leave-category.ferie { border-left-color: #4caf50; }
+        .leave-category.ferie-vecchie { border-left-color: #2196f3; }
+        .leave-category.festivita { border-left-color: #ff9800; }
+        .leave-category.motivi-familiari { border-left-color: #9c27b0; }
+        .leave-category.recuperi { border-left-color: #f44336; }
+        
+        .leave-category-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .leave-category-header i {
+            margin-right: 8px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .leave-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .leave-stat {
+            flex: 1;
+            min-width: 70px;
+            text-align: center;
+            background-color: white;
+            padding: 8px 5px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .leave-stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .leave-stat-value {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        
+        .leave-stat.totali .leave-stat-value { color: #1976d2; }
+        .leave-stat.utilizzate .leave-stat-value { color: #f44336; }
+        .leave-stat.residue .leave-stat-value { color: #4caf50; }
+        .leave-stat.in-attesa .leave-stat-value { color: #ff9800; }
+        
+        /* Stili per le statistiche delle ferie */
+        .leave-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 5px;
+        }
+        
+        .leave-stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Colori per i diversi tipi di ferie */
+        .leave-category.ferie .leave-stat-value { color: #4caf50; }
+        .leave-category.ferie-vecchie .leave-stat-value { color: #2196f3; }
+        .leave-category.festivita .leave-stat-value { color: #ff9800; }
+        .leave-category.motivi-familiari .leave-stat-value { color: #9c27b0; }
+        .leave-category.recuperi .leave-stat-value { color: #f44336; }
+        
+        /* Stili per le ferie in attesa */
+        .leave-stat.in-attesa .leave-stat-value {
+            color: #ff9800 !important;
+            display: block !important;
+        }
+        
+        .leave-stat.in-attesa {
+            display: block !important;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .leave-categories {
+                flex-direction: column;
+            }
+            
+            .leave-category {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <h1>Gestione Ferie Personale ATA</h1>
+                <div class="user-info">
+                    <div class="user-details">
+                        <span id="user-name" class="user-name">Utente: </span>
+                        <span id="user-role" class="user-role">Ruolo: </span>
+                    </div>
+                    <button class="btn btn-small" id="logout-btn">Logout</button>
+                </div>
+            </div>
+            
+            <div class="dashboard-content">
+                <ul class="nav-tabs">
+                    <li><a href="#" class="active" data-tab="riepilogo">Riepilogo</a></li>
+                    <li><a href="#" data-tab="richieste">Le mie richieste</a></li>
+                    <li><a href="#" data-tab="calendario">Calendario</a></li>
+                </ul>
+                
+                <!-- Tab Riepilogo con il nuovo stile grafico -->
+                <div class="tab-content" id="riepilogo-tab">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Riepilogo Ferie</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="leave-categories">
+                                <div class="leave-category ferie">
+                                    <div class="leave-category-header">
+                                        <i class="fas fa-umbrella-beach"></i> Ferie
+                                    </div>
+                                    <div class="leave-stats">
+                                        <div class="leave-stat totali">
+                                            <div class="leave-stat-label">Totali</div>
+                                            <div class="leave-stat-value" id="ferie-totali">--</div>
+                                        </div>
+                                        <div class="leave-stat utilizzate">
+                                            <div class="leave-stat-label">Utilizzate</div>
+                                            <div class="leave-stat-value" id="ferie-utilizzate">--</div>
+                                        </div>
+                                        <div class="leave-stat residue">
+                                            <div class="leave-stat-label">Residue</div>
+                                            <div class="leave-stat-value" id="ferie-disponibili">--</div>
+                                        </div>
+                                        <div class="leave-stat in-attesa">
+                                            <div class="leave-stat-label">In attesa</div>
+                                            <div class="leave-stat-value" id="ferie-in-attesa">0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="leave-category ferie-vecchie">
+                                    <div class="leave-category-header">
+                                        <i class="fas fa-history"></i> Ferie Vecchie
+                                    </div>
+                                    <div class="leave-stats">
+                                        <div class="leave-stat totali">
+                                            <div class="leave-stat-label">Totali</div>
+                                            <div class="leave-stat-value" id="ferie-vecchie-totali">--</div>
+                                        </div>
+                                        <div class="leave-stat utilizzate">
+                                            <div class="leave-stat-label">Utilizzate</div>
+                                            <div class="leave-stat-value" id="ferie-vecchie-utilizzate">--</div>
+                                        </div>
+                                        <div class="leave-stat residue">
+                                            <div class="leave-stat-label">Residue</div>
+                                            <div class="leave-stat-value" id="ferie-vecchie-disponibili">--</div>
+                                        </div>
+                                        <div class="leave-stat in-attesa">
+                                            <div class="leave-stat-label">In attesa</div>
+                                            <div class="leave-stat-value" id="ferie-vecchie-in-attesa">0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="leave-category festivita">
+                                    <div class="leave-category-header">
+                                        <i class="fas fa-calendar-day"></i> Festività Soppresse
+                                    </div>
+                                    <div class="leave-stats">
+                                        <div class="leave-stat totali">
+                                            <div class="leave-stat-label">Totali</div>
+                                            <div class="leave-stat-value" id="festivita-totali">--</div>
+                                        </div>
+                                        <div class="leave-stat utilizzate">
+                                            <div class="leave-stat-label">Utilizzate</div>
+                                            <div class="leave-stat-value" id="festivita-utilizzate">--</div>
+                                        </div>
+                                        <div class="leave-stat residue">
+                                            <div class="leave-stat-label">Residue</div>
+                                            <div class="leave-stat-value" id="festivita-disponibili">--</div>
+                                        </div>
+                                        <div class="leave-stat in-attesa">
+                                            <div class="leave-stat-label">In attesa</div>
+                                            <div class="leave-stat-value" id="festivita-in-attesa">0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="leave-category motivi-familiari">
+                                    <div class="leave-category-header">
+                                        <i class="fas fa-home"></i> Motivi Familiari
+                                    </div>
+                                    <div class="leave-stats">
+                                        <div class="leave-stat totali">
+                                            <div class="leave-stat-label">Totali</div>
+                                            <div class="leave-stat-value" id="motivi-familiari-totali">--</div>
+                                        </div>
+                                        <div class="leave-stat utilizzate">
+                                            <div class="leave-stat-label">Utilizzate</div>
+                                            <div class="leave-stat-value" id="motivi-familiari-utilizzate">--</div>
+                                        </div>
+                                        <div class="leave-stat residue">
+                                            <div class="leave-stat-label">Residue</div>
+                                            <div class="leave-stat-value" id="motivi-familiari-disponibili">--</div>
+                                        </div>
+                                        <div class="leave-stat in-attesa">
+                                            <div class="leave-stat-label">In attesa</div>
+                                            <div class="leave-stat-value" id="motivi-familiari-in-attesa">0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="leave-category recuperi">
+                                    <div class="leave-category-header">
+                                        <i class="fas fa-redo"></i> Recuperi
+                                    </div>
+                                    <div class="leave-stats">
+                                        <div class="leave-stat totali">
+                                            <div class="leave-stat-label">Totali</div>
+                                            <div class="leave-stat-value" id="recuperi-totali">--</div>
+                                        </div>
+                                        <div class="leave-stat utilizzate">
+                                            <div class="leave-stat-label">Utilizzate</div>
+                                            <div class="leave-stat-value" id="recuperi-utilizzati">--</div>
+                                        </div>
+                                        <div class="leave-stat residue">
+                                            <div class="leave-stat-label">Residue</div>
+                                            <div class="leave-stat-value" id="recuperi-residui">--</div>
+                                        </div>
+                                        <div class="leave-stat in-attesa">
+                                            <div class="leave-stat-label">In attesa</div>
+                                            <div class="leave-stat-value" id="recuperi-in-attesa">0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="btn-container">
+                        <button class="btn btn-primary" id="nuova-richiesta-btn">Nuova Richiesta</button>
+                    </div>
+                </div>
+                
+                <!-- Resto del contenuto rimane invariato -->
+                <div class="tab-content" id="richieste-tab" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Le mie richieste</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Tipo</th>
+                                            <th>Data Inizio</th>
+                                            <th>Data Fine</th>
+                                            <th>Giorni</th>
+                                            <th>Stato</th>
+                                            <th>Azioni</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="richieste-table-body">
+                                        <!-- I dati verranno inseriti dinamicamente da JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab Calendario -->
+                <div class="tab-content" id="calendario-tab" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Calendario Ferie</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="calendar">
+                                <div class="calendar-header">
+                                    <div class="calendar-nav">
+                                        <button class="btn btn-small" id="prev-month">Mese Prec.</button>
+                                    </div>
+                                    <div class="calendar-title" id="calendar-month-year">Maggio 2024</div>
+                                    <div class="calendar-nav">
+                                        <button class="btn btn-small" id="next-month">Mese Succ.</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="calendar-table-container">
+                                    <table class="calendar-table">
+                                        <thead>
+                                            <tr>
+                                                <th>L</th>
+                                                <th>M</th>
+                                                <th>M</th>
+                                                <th>G</th>
+                                                <th>V</th>
+                                                <th>S</th>
+                                                <th>D</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="calendar-body">
+                                            <!-- I dati del calendario verranno inseriti dinamicamente da JavaScript -->
+                                        </tbody>
+                                    </table>
+                                    
+                                    <!-- Legenda per gli indicatori delle richieste -->
+                                    <div class="calendar-legend">
+                                        <div class="legend-item">
+                                            <span class="legend-indicator legend-approvata"></span>
+                                            <span class="legend-text">Approvata</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <span class="legend-indicator legend-in-attesa"></span>
+                                            <span class="legend-text">In attesa</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <span class="legend-indicator legend-rifiutata"></span>
+                                            <span class="legend-text">Rifiutata</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <span class="legend-indicator" style="background-color: #ffebee; border: 1px solid #f44336;"></span>
+                                            <span class="legend-text">Weekend/Festivo</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Alla fine del file, prima degli altri scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/user-utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/holidays.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

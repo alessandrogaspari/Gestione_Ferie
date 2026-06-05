@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guida Installazione WebApp su Replit</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        .overview {
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        .step {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .code {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        ul, ol {
+            margin-bottom: 15px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .checklist {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .checklist li:before {
+            content: "✅ ";
+            margin-right: 8px;
+        }
+        .troubleshoot {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        @media print {
+            body { background-color: white; }
+            .container { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guida all'Installazione della WebApp "Gestione Ferie ATA" su Replit</h1>
+        
+        <div class="overview">
+            <h2>Panoramica</h2>
+            <p>Questa guida fornisce istruzioni dettagliate per installare e configurare l'applicazione web "Gestione Ferie ATA" sulla piattaforma Replit utilizzando il piano gratuito.</p>
+            
+            <h3>Prerequisiti</h3>
+            <ul>
+                <li>Account Replit (gratuito)</li>
+                <li>File del progetto "AppFerie" scaricati localmente</li>
+                <li>Browser web moderno</li>
+            </ul>
+            
+            <h3>Caratteristiche del Progetto</h3>
+            <ul>
+                <li><strong>Tecnologie</strong>: Node.js, Express.js, HTML, CSS, JavaScript</li>
+                <li><strong>Database</strong>: File Excel (DB_Ferie.xlsx)</li>
+                <li><strong>Compatibilità</strong>: Completamente compatibile con Replit</li>
+                <li><strong>Persistenza</strong>: I file Excel persistono automaticamente su Replit</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <h2>Passaggio 1: Creazione del Progetto su Replit</h2>
+            
+            <h3>1.1 Accesso a Replit</h3>
+            <ol>
+                <li>Vai su <a href="https://replit.com">replit.com</a></li>
+                <li>Accedi al tuo account o registrati gratuitamente</li>
+                <li>Clicca su <strong>"Create Repl"</strong> o <strong>"+ Create"</strong></li>
+            </ol>
+            
+            <h3>1.2 Configurazione Iniziale</h3>
+            <ol>
+                <li>Seleziona <strong>"Import from GitHub"</strong> o <strong>"Upload files"</strong></li>
+                <li>Se scegli "Upload files":
+                    <ul>
+                        <li>Seleziona tutti i file della cartella AppFerie</li>
+                        <li>Assicurati di includere:
+                            <ul>
+                                <li><code>server.js</code></li>
+                                <li><code>package.json</code></li>
+                                <li><code>DB_Ferie.xlsx</code></li>
+                                <li>Cartelle <code>js/</code>, <code>css/</code>, <code>img/</code></li>
+                                <li>File HTML (index.html, dashboard.html, ecc.)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>Nomina il progetto: <strong>"gestione-ferie-ata"</strong></li>
+                <li>Seleziona <strong>"Node.js"</strong> come template</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h2>Passaggio 2: Configurazione dei File</h2>
+            
+            <h3>2.1 Modifica di server.js</h3>
+            <p>Il file <code>server.js</code> deve essere aggiornato per utilizzare la porta dinamica di Replit:</p>
+            
+            <div class="code">
+// Sostituire questa riga:
+// const PORT = 8081;
+
+// Con questa:
+const PORT = process.env.PORT || 8081;
+
+// Alla fine del file, sostituire:
+// app.listen(PORT, () => {
+//     console.log(`Server in esecuzione su http://localhost:${PORT}`);
+// });
+
+// Con:
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server in esecuzione su porta ${PORT}`);
+});
+            </div>
+            
+            <h3>2.2 Creazione del file .replit</h3>
+            <p>Crea un nuovo file chiamato <code>.replit</code> nella root del progetto:</p>
+            
+            <div class="code">
+run = "npm start"
+entrypoint = "server.js"
+
+[nix]
+channel = "stable-22_11"
+
+[deployment]
+run = ["sh", "-c", "npm start"]
+            </div>
+            
+            <h3>2.3 Verifica package.json</h3>
+            <p>Assicurati che il file <code>package.json</code> contenga:</p>
+            
+            <div class="code">
+{
+  "name": "appferie",
+  "version": "1.0.0",
+  "description": "Applicazione per la gestione delle ferie del personale ATA",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "xlsx": "^0.18.5"
+  }
+}
+            </div>
+        </div>
+
+        <div class="step">
+            <h2>Passaggio 3: Installazione e Avvio</h2>
+            
+            <h3>3.1 Installazione delle Dipendenze</h3>
+            <ol>
+                <li>Apri la <strong>Console</strong> in Replit</li>
+                <li>Esegui il comando: <div class="code">npm install</div></li>
+                <li>Attendi il completamento dell'installazione</li>
+            </ol>
+            
+            <h3>3.2 Avvio dell'Applicazione</h3>
+            <ol>
+                <li>Clicca sul pulsante <strong>"Run"</strong> verde</li>
+                <li>Oppure esegui nella console: <div class="code">npm start</div></li>
+                <li>L'applicazione si avvierà automaticamente</li>
+            </ol>
+            
+            <h3>3.3 Accesso all'Applicazione</h3>
+            <ol>
+                <li>Replit mostrerà automaticamente l'URL dell'applicazione</li>
+                <li>L'URL sarà simile a: <code>https://gestione-ferie-ata.username.repl.co</code></li>
+                <li>Clicca sull'URL per aprire l'applicazione</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h2>Passaggio 4: Configurazioni Opzionali</h2>
+            
+            <h3>4.1 Variabili d'Ambiente (Opzionale)</h3>
+            <p>Per maggiore sicurezza, puoi configurare variabili d'ambiente:</p>
+            <ol>
+                <li>Vai alla sezione <strong>"Secrets"</strong> in Replit</li>
+                <li>Aggiungi le seguenti variabili:
+                    <ul>
+                        <li><code>NODE_ENV</code>: <code>production</code></li>
+                        <li><code>DB_PATH</code>: <code>DB_Ferie.xlsx</code></li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <h3>4.2 Configurazione del Dominio Personalizzato</h3>
+            <div class="info">
+                <p>Su Replit gratuito:</p>
+                <ul>
+                    <li>L'URL sarà: <code>https://nome-progetto.username.repl.co</code></li>
+                    <li>Per domini personalizzati è necessario un piano a pagamento</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="step">
+            <h2>Passaggio 5: Test e Verifica</h2>
+            
+            <h3>5.1 Test delle Funzionalità</h3>
+            <ol>
+                <li><strong>Login</strong>: Testa l'accesso con credenziali esistenti</li>
+                <li><strong>Dashboard</strong>: Verifica la visualizzazione dei dati</li>
+                <li><strong>Richieste</strong>: Prova a creare una nuova richiesta di ferie</li>
+                <li><strong>Amministrazione</strong>: Testa le funzioni amministrative</li>
+            </ol>
+            
+            <h3>5.2 Verifica della Persistenza</h3>
+            <ol>
+                <li>Crea una richiesta di test</li>
+                <li>Riavvia l'applicazione</li>
+                <li>Verifica che i dati siano ancora presenti</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h2>Gestione e Manutenzione</h2>
+            
+            <h3>Backup Automatico</h3>
+            <ul>
+                <li>Replit effettua automaticamente snapshot del filesystem</li>
+                <li>I file Excel sono persistenti e sicuri</li>
+                <li>Non è necessaria configurazione aggiuntiva</li>
+            </ul>
+            
+            <h3>Monitoraggio</h3>
+            <ul>
+                <li>Usa la console di Replit per monitorare i log</li>
+                <li>L'applicazione si riavvia automaticamente in caso di errori</li>
+            </ul>
+            
+            <h3>Aggiornamenti</h3>
+            <ol>
+                <li>Modifica i file direttamente nell'editor di Replit</li>
+                <li>L'applicazione si riavvia automaticamente</li>
+                <li>Per aggiornamenti maggiori, carica i nuovi file</li>
+            </ol>
+        </div>
+
+        <div class="troubleshoot">
+            <h2>Risoluzione Problemi</h2>
+            
+            <h3>Problema: L'applicazione non si avvia</h3>
+            <p><strong>Soluzione</strong>:</p>
+            <ol>
+                <li>Verifica che <code>package.json</code> sia corretto</li>
+                <li>Controlla che tutte le dipendenze siano installate</li>
+                <li>Esegui <code>npm install</code> nella console</li>
+            </ol>
+            
+            <h3>Problema: Errore di porta</h3>
+            <p><strong>Soluzione</strong>:</p>
+            <ol>
+                <li>Assicurati che <code>server.js</code> usi <code>process.env.PORT</code></li>
+                <li>Verifica che il server ascolti su <code>0.0.0.0</code></li>
+            </ol>
+            
+            <h3>Problema: File Excel non trovato</h3>
+            <p><strong>Soluzione</strong>:</p>
+            <ol>
+                <li>Verifica che <code>DB_Ferie.xlsx</code> sia nella root del progetto</li>
+                <li>Controlla i permessi del file</li>
+                <li>Ricarica il file se necessario</li>
+            </ol>
+            
+            <h3>Problema: Errori di CORS</h3>
+            <p><strong>Soluzione</strong>:</p>
+            <ol>
+                <li>Verifica che il middleware CORS sia configurato</li>
+                <li>Controlla che l'URL di Replit sia corretto</li>
+            </ol>
+        </div>
+
+        <div class="warning">
+            <h2>Limitazioni del Piano Gratuito</h2>
+            
+            <h3>Risorse</h3>
+            <ul>
+                <li><strong>RAM</strong>: Limitata, ma sufficiente per l'applicazione</li>
+                <li><strong>CPU</strong>: Condivisa, prestazioni moderate</li>
+                <li><strong>Storage</strong>: 2 GiB per progetto (più che sufficiente)</li>
+            </ul>
+            
+            <h3>Disponibilità</h3>
+            <ul>
+                <li>L'applicazione può "dormire" dopo inattività</li>
+                <li>Si riattiva automaticamente al primo accesso</li>
+                <li>Tempo di riattivazione: 10-30 secondi</li>
+            </ul>
+            
+            <h3>Traffico</h3>
+            <ul>
+                <li>Nessun limite specifico sul piano gratuito</li>
+                <li>Adatto per uso interno/aziendale</li>
+            </ul>
+        </div>
+
+        <div class="info">
+            <h2>Ottimizzazioni Consigliate</h2>
+            
+            <h3>Per Prestazioni</h3>
+            <ol>
+                <li><strong>Compressione</strong>: Abilita la compressione gzip</li>
+                <li><strong>Cache</strong>: Implementa cache per file statici</li>
+                <li><strong>Logging</strong>: Riduci il logging in produzione</li>
+            </ol>
+            
+            <h3>Per Sicurezza</h3>
+            <ol>
+                <li><strong>HTTPS</strong>: Automaticamente fornito da Replit</li>
+                <li><strong>Variabili d'ambiente</strong>: Usa secrets per configurazioni sensibili</li>
+                <li><strong>Rate limiting</strong>: Implementa limitazione delle richieste</li>
+            </ol>
+        </div>
+
+        <div class="success">
+            <h2>Conclusioni</h2>
+            
+            <p>L'applicazione "Gestione Ferie ATA" è completamente compatibile con Replit e può essere installata facilmente seguendo questa guida. Il piano gratuito offre risorse sufficienti per un uso aziendale interno con un numero moderato di utenti.</p>
+            
+            <h3>Vantaggi di Replit</h3>
+            <ul class="checklist">
+                <li>Installazione semplice e veloce</li>
+                <li>Persistenza automatica dei dati</li>
+                <li>HTTPS incluso</li>
+                <li>Backup automatici</li>
+                <li>Nessuna configurazione server necessaria</li>
+            </ul>
+            
+            <h3>Prossimi Passi</h3>
+            <ol>
+                <li>Segui la guida passo-passo</li>
+                <li>Testa tutte le funzionalità</li>
+                <li>Configura gli utenti iniziali</li>
+                <li>Forma il personale sull'uso dell'applicazione</li>
+            </ol>
+        </div>
+
+        <hr style="margin: 40px 0; border: none; border-top: 2px solid #ecf0f1;">
+        
+        <div style="text-align: center; color: #7f8c8d; font-size: 14px;">
+            <p><strong>Supporto</strong>: Per assistenza tecnica, consulta la documentazione di Replit o contatta il supporto tecnico.</p>
+            <p><strong>Versione Guida</strong>: 1.0 - Gennaio 2025 | <strong>Compatibilità</strong>: Replit Free Plan, Node.js 18+</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Istruzioni per Importare le Macro VBA</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .step-number {
+            background: #007bff;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        .step-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .step-content {
+            color: #666;
+            line-height: 1.6;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .code {
+            background: #f1f3f4;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+        }
+
+        .back-button {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 30px;
+        }
+        .back-button:hover {
+            background: #5a6268;
+            color: white;
+            text-decoration: none;
+        }
+        .macro-functions {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Istruzioni per Importare le Macro VBA</h1>
+            <p>Guida step-by-step per aggiungere le macro di formattazione al tuo file Excel</p>
+        </div>
+
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">📥</span>
+                Download File Macro
+            </div>
+            <div class="step-content">
+                <p><strong>Prima di iniziare, scarica il file delle macro:</strong></p>
+                <a href="./FormattazioneProspettoFerie.bas" class="back-button" style="background: #28a745; margin: 10px 0; display: inline-block;">
+                    📁 Scarica FormattazioneProspettoFerie.bas
+                </a>
+                <div class="warning">
+                    <strong>⚠️ Importante:</strong> Devi prima scaricare questo file BAS, poi seguire la sequenza di importazione sul file Excel (.xlsm) che hai già scaricato.
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">1</span>
+                Apri il file Excel scaricato
+            </div>
+            <div class="step-content">
+                <p>Individua il file <strong>Prospetto_Ferie_[Anno].xlsm</strong> nella cartella dei download e aprilo con Microsoft Excel.</p>
+                <div class="warning">
+                    <strong>Nota:</strong> Se Excel mostra un avviso di sicurezza sulle macro, clicca su "Abilita contenuto" per permettere l'uso delle macro.
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">2</span>
+                Apri l'Editor VBA
+            </div>
+            <div class="step-content">
+                <p>Premi la combinazione di tasti:</p>
+                <div class="code">Alt + F11</div>
+                <p>Oppure vai nel menu <strong>Sviluppo > Visual Basic</strong></p>
+                <div class="warning">
+                    <strong>Se non vedi il menu "Sviluppo":</strong><br>
+                    1. Vai su File > Opzioni<br>
+                    2. Seleziona "Personalizzazione barra multifunzione"<br>
+                    3. Spunta la casella "Sviluppo" nella colonna di destra
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">3</span>
+                Importa il modulo VBA
+            </div>
+            <div class="step-content">
+                <p>Nell'Editor VBA:</p>
+                <ol>
+                    <li>Fai clic destro sul nome del progetto (nella finestra "Progetto")</li>
+                    <li>Seleziona <strong>Importa file...</strong></li>
+                    <li>Naviga fino alla cartella dove hai scaricato il file <strong>FormattazioneProspettoFerie.bas</strong></li>
+                    <li>Seleziona il file e clicca <strong>Apri</strong></li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">4</span>
+                Verifica l'importazione
+            </div>
+            <div class="step-content">
+                <p>Dopo l'importazione, dovresti vedere nella finestra "Progetto" un nuovo modulo chiamato <strong>FormattazioneProspettoFerie</strong>.</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">5</span>
+                Salva il file
+            </div>
+            <div class="step-content">
+                <p>Premi <strong>Ctrl + S</strong> o vai su <strong>File > Salva</strong> per salvare il file con le macro importate.</p>
+                <div class="success">
+                    ✅ Perfetto! Le macro sono state importate correttamente.
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">6</span>
+                Chiudi l'Editor VBA
+            </div>
+            <div class="step-content">
+                <p>Chiudi l'Editor VBA premendo <strong>Alt + Q</strong> o cliccando sulla X per tornare al foglio Excel.</p>
+            </div>
+        </div>
+
+        <div class="macro-functions">
+            <h3>🎯 Funzioni Macro Disponibili</h3>
+            <p>Una volta importate le macro, avrai accesso alle seguenti funzioni di formattazione:</p>
+            <ul>
+                <li><strong>FormattaTuttiIFogli:</strong> Applica tutte le formattazioni a tutti i fogli</li>
+                <li><strong>ApplicaSoloColoriRossi:</strong> Colora solo weekend e festività in rosso</li>
+                <li><strong>ApplicaSoloColoriVerdi:</strong> Colora solo le tipologie di ferie (F, FV, FS, R, MF) in verde</li>
+                <li><strong>ApplicaSoloBordi:</strong> Applica solo i bordi neri</li>
+                <li><strong>RimuoviFormattazione:</strong> Rimuove tutta la formattazione</li>
+            </ul>
+            <p><strong>Per eseguire una macro:</strong> Premi Alt + F8, seleziona la macro desiderata e clicca "Esegui".</p>
+        </div>
+
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">7</span>
+                Esegui la macro FormattaTuttiIFogli
+            </div>
+            <div class="step-content">
+                <p><strong>Una volta caricato il file, la macro da lanciare è quella denominata "FormattaTuttiIFogli".</strong></p>
+                <p>Per applicare immediatamente tutte le formattazioni:</p>
+                <ol>
+                    <li>Premi <strong>Alt + F8</strong> per aprire la finestra delle macro</li>
+                    <li>Seleziona <strong>FormattaTuttiIFogli</strong> dall'elenco delle macro disponibili</li>
+                    <li>Clicca <strong>Esegui</strong></li>
+                    <li>Conferma l'operazione quando richiesto</li>
+                </ol>
+                <div class="success">
+                    🎉 Eccellente! Il tuo prospetto ferie è ora completamente formattato!
+                </div>
+                <div class="warning">
+                    <strong>💡 Suggerimento:</strong> La macro FormattaTuttiIFogli è quella principale che applica tutte le formattazioni necessarie al prospetto ferie. È la macro raccomandata per l'uso normale.
+                </div>
+            </div>
+        </div>
+
+        <div class="warning">
+            <h4>🔧 Risoluzione Problemi</h4>
+            <ul>
+                <li><strong>"Impossibile importare il file":</strong> Verifica che il file FormattazioneProspettoFerie.bas sia stato scaricato correttamente</li>
+                <li><strong>"Macro disabilitate":</strong> Vai su File > Opzioni > Centro protezione > Impostazioni Centro protezione > Impostazioni macro e seleziona "Abilita tutte le macro"</li>
+                <li><strong>"Errore durante l'esecuzione":</strong> Assicurati che il file Excel sia in formato .xlsm (macro-enabled)</li>
+            </ul>
+        </div>
+
+        <a href="adm_dashboard.html" class="back-button">← Torna al Dashboard</a>
+    </div>
+
+
+</body>
+</html>

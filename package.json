@@ -1,0 +1,27 @@
+{
+  "name": "appferie",
+  "version": "1.0.0",
+  "description": "Applicazione per la gestione delle ferie del personale ATA",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ferie",
+    "ata",
+    "gestione"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.51.0",
+    "axios": "^1.11.0",
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "nodemailer": "^7.0.5",
+    "xlsx": "^0.18.5"
+  }
+}

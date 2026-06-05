@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Richiesta Ferie - Gestione Ferie ATA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Stili aggiuntivi per il nuovo layout */
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        
+        .input-container label.top-label {
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        
+        .input-container label.bottom-label {
+            font-size: 13px;
+            color: #666;
+            margin-top: 8px;
+        }
+        
+        .input-container input,
+        .input-container select,
+        .input-container textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        .input-container input:focus,
+        .input-container select:focus,
+        .input-container textarea:focus {
+            border-color: #1976d2;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+        }
+        
+        .input-container input[readonly] {
+            background-color: #f9f9f9;
+            cursor: not-allowed;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-row.two-columns {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .disponibilita-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 13px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <h1>Richiesta Ferie</h1>
+                <div class="user-info">
+                    <div class="user-details">
+                        <span id="user-name">Utente: </span>
+                        <span id="user-role">Ruolo: </span>
+                    </div>
+                    <a href="dashboard.html" class="btn btn-small">Torna alla Dashboard</a>
+                    <button class="btn btn-small" id="logout-btn">Logout</button>
+                </div>
+            </div>
+            
+            <div class="dashboard-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Nuova Richiesta</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="richiesta-form">
+                            <!-- Prima riga: Tipo assenza, Data Inizio, Data Fine -->
+                            <div class="form-row">
+                                <div class="input-container">
+                                    <label for="tipo-ferie" class="top-label">Tipo di Assenza</label>
+                                    <select id="tipo-ferie" name="tipo-ferie" required>
+                                        <option value="" selected disabled>Seleziona tipo di assenza</option>
+                                        <option value="FERIE">Ferie</option>
+                                        <option value="FERIE VECCHIE">Ferie Vecchie</option>
+                                        <option value="FESTIVITA' SOPPRESSE">Festività Soppresse</option>
+                                        <option value="MOTIVI FAMILIARI">Motivi Familiari</option>
+                                        <option value="RECUPERI">Recuperi</option>
+                                    </select>
+                                    <div class="disponibilita-info">
+                                        <span id="disponibilita-label">Disponibili:</span>
+                                        <span id="disponibilita-value">--</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="input-container">
+                                    <label for="data-inizio" class="top-label">Data Inizio</label>
+                                    <input type="date" id="data-inizio" name="data-inizio" required>
+                                    <label for="data-inizio" class="bottom-label">Seleziona la data di inizio</label>
+                                </div>
+                                
+                                <div class="input-container">
+                                    <label for="data-fine" class="top-label">Data Fine</label>
+                                    <input type="date" id="data-fine" name="data-fine" required>
+                                    <label for="data-fine" class="bottom-label">Seleziona la data di fine</label>
+                                </div>
+                            </div>
+                            
+                            <!-- Seconda riga: Giorni Lavorativi e Note -->
+                            <div class="form-row two-columns">
+                                <div class="input-container">
+                                    <label for="giorni-lavorativi" class="top-label">Giorni Lavorativi</label>
+                                    <input type="number" id="giorni-lavorativi" name="giorni-lavorativi" min="0.5" step="0.5" readonly>
+                                    <label for="giorni-lavorativi" class="bottom-label">Giorni lavorativi calcolati automaticamente</label>
+                                </div>
+                                
+                                <div class="input-container">
+                                    <label for="note" class="top-label">Note</label>
+                                    <textarea id="note" name="note" placeholder="Inserisci eventuali note o motivazioni"></textarea>
+                                    <label for="note" class="bottom-label">Aggiungi dettagli o motivazioni per la richiesta</label>
+                                </div>
+                            </div>
+                            
+                            <style>
+                                /* Stile modificato per il riepilogo giorni in formato tabella */
+                                .days-summary {
+                                    background-color: #f5f5f5;
+                                    border: 1px solid #ddd;
+                                    border-radius: 5px;
+                                    padding: 12px 15px;
+                                    margin: 20px 0;
+                                    display: flex;
+                                    justify-content: space-between;
+                                    align-items: center;
+                                }
+                                
+                                .days-summary-table {
+                                    width: 100%;
+                                    display: flex;
+                                    justify-content: space-between;
+                                    align-items: center;
+                                }
+                                
+                                .days-summary-item {
+                                    display: flex;
+                                    align-items: center;
+                                    padding: 0 15px;
+                                }
+                                
+                                .days-summary-item .label {
+                                    font-weight: 500;
+                                    color: #555;
+                                    margin-right: 8px;
+                                }
+                                
+                                .days-summary-item .value {
+                                    font-weight: 600;
+                                    color: #1976d2;
+                                    font-size: 16px;
+                                }
+                            </style>
+                            
+                            <!-- Sostituisci la sezione days-summary esistente con questa versione modificata -->
+                            <div class="days-summary">
+                                <div class="days-summary-table">
+                                    <div class="days-summary-item">
+                                        <div class="label">Giorni Totali:</div>
+                                        <div class="value" id="summary-totale">0</div>
+                                    </div>
+                                    <div class="days-summary-item">
+                                        <div class="label">Giorni Lavorativi:</div>
+                                        <div class="value" id="summary-lavorativi">0</div>
+                                    </div>
+                                    <div class="days-summary-item">
+                                        <div class="label">Festivi/Weekend:</div>
+                                        <div class="value" id="summary-festivi">0</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="btn-container">
+                                <a href="dashboard.html" class="btn btn-secondary">Annulla</a>
+                                <button type="submit" class="btn btn-primary">Invia Richiesta</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Script -->
+    <script src="js/api.js"></script>
+    <script src="js/user-utils.js"></script>
+    <script src="js/holidays.js"></script>
+    <script src="js/richiesta.js"></script>
+</body>
+</html>
